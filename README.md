@@ -68,7 +68,8 @@ ex)
 
 ## 2. UI 구조 설계
 
-(설계 사진 첨부)
+<img width="1624" height="1137" alt="image" src="https://github.com/user-attachments/assets/14a21290-9dfa-4d44-bf15-84a410801920" />
+
 
 ## 3. 구현 (Tailwind CSS)
 
