@@ -43,7 +43,9 @@
 BEM은 Block, Element, Modifier의 약자로 CSS 클래스명을 짓는 방법론이다. 클래스 이름만 봐도 어떤 컴포넌트의 어떤 부분인지 바로 알 수 있도록 규칙을 정한 것이다.
 
 **Block** — 독립적으로 존재할 수 있는 컴포넌트 단위
+
 **Element** — Block 안에 속한 구성 요소. 언더바 두 개(__)로 연결
+
 **Modifier** — Block이나 Element의 변형 상태. 하이픈 두 개(--)로 연결
 
 다음은 실습과정에서 이용한 Block,Element,Modifier이다.
