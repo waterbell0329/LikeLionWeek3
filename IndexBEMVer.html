@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>자기소개 카드 — BEM 방식</title>
+  <style>
+
+   
+       /*
+       기본 리셋 & 페이지
+       */
+   
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+      background-color: #f3f4f6;
+      min-height: 100vh;
+      padding: 1.5rem;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.is-dark {
+      background-color: #0f172a;
+    }
+
+    /* 
+       애니메이션
+     */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.85); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1;    transform: scale(1);   }
+      50%       { opacity: 0.45; transform: scale(1.5); }
+    }
+
+    /* 
+       레이아웃
+     */
+    .page-header {
+      display: flex;
+      justify-content: flex-end;
+      max-width: 680px;
+      margin: 0 auto 1rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* 데스크탑: 2열 */
+    @media (min-width: 560px) {
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* 
+       다크모드 토글 버튼  (Block: .toggle-btn)
+     */
+    .toggle-btn {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 16px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      color: #374151;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .toggle-btn:hover  { background: #f9fafb; }
+    .toggle-btn:active { transform: scale(0.96); }
+
+    body.is-dark .toggle-btn {
+      background: #1e293b;
+      border-color: #334155;
+      color: #94a3b8;
+    }
+    body.is-dark .toggle-btn:hover { background: #273449; }
+
+    /* 
+       Block: .card
+     */
+    .card {
+      background: #ffffff;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid transparent;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      animation: fadeInUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+      transition:
+        transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.3s,
+        background 0.3s,
+        border-color 0.3s;
+    }
+    .card:nth-child(2) { animation-delay: 0.1s; }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.13);
+    }
+
+    /* Modifier: .card--red */
+    .card--red .card__banner     { background: linear-gradient(135deg, #7f1d1d, #ef4444); }
+    .card--red .card__avatar     { background: #dc2626; }
+    .card--red .card__tag--featured {
+      background: #fef2f2;
+      color: #991b1b;
+      border-color: #fecaca;
+    }
+    .card--red .card__btn--primary {
+      background: #7f1d1d;
+      border-color: #7f1d1d;
+    }
+    .card--red .card__btn--primary:hover { background: #dc2626; border-color: #dc2626; }
+
+    /* 다크모드 카드 */
+    body.is-dark .card {
+      background: #1e293b;
+      border-color: #334155;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
+    }
+    body.is-dark .card:hover {
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    /* 모바일 카드 레이아웃 */
+    @media (max-width: 559px) {
+      .card { display: flex; flex-direction: row; border-radius: 16px; }
+    }
+
+    /*  Element: .card__banner  */
+    .card__banner {
+      position: relative;
+      height: 80px;
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    }
+
+    @media (max-width: 559px) {
+      .card__banner {
+        width: 80px;
+        height: auto;
+        min-height: 100%;
+        flex-shrink: 0;
+      }
+    }
+
+    /*  Element: .card__banner-status  */
+    .card__banner-status {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 500;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.18);
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    @media (max-width: 559px) {
+      .card__banner-status { display: none; }
+    }
+
+    /*  Element: .card__banner-dot  */
+    .card__banner-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4ade80;
+      flex-shrink: 0;
+    }
+
+    /* Modifier: .card__banner-dot--pulse */
+    .card__banner-dot--pulse {
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+
+    /*  Element: .card__avatar-wrap  */
+    .card__avatar-wrap {
+      position: absolute;
+      bottom: -26px;
+      left: 18px;
+      animation: popIn 0.5s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @media (max-width: 559px) {
+      .card__avatar-wrap {
+        bottom: auto;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        animation: none;
+      }
+    }
+
+    /*  Element: .card__avatar  */
+    .card__avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 3px solid #ffffff;
+      background: #2563eb;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.3s;
+    }
+
+    body.is-dark .card__avatar { border-color: #1e293b; }
+
+    /*  Element: .card__body  */
+    .card__body {
+      padding: 36px 18px 18px;
+    }
+
+    @media (max-width: 559px) {
+      .card__body {
+        padding: 14px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+    }
+
+    /*  Element: .card__name */
+    .card__name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 2px;
+      transition: color 0.3s;
+    }
+    body.is-dark .card__name { color: #f1f5f9; }
+
+    /* Element: .card__role */
+    .card__role {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-bottom: 10px;
+      transition: color 0.3s;
+    }
+    body.is-dark .card__role { color: #64748b; }
+
+    /* Element: .card__bio */
+    .card__bio {
+      font-size: 12px;
+      color: #6b7280;
+      border-left: 2px solid #e5e7eb;
+      padding-left: 10px;
+      margin-bottom: 14px;
+      line-height: 1.65;
+      transition: color 0.3s, border-color 0.3s;
+    }
+    body.is-dark .card__bio  { color: #94a3b8; border-color: #334155; }
+
+    @media (max-width: 559px) {
+      .card__bio { display: none; }
+    }
+
+    /* Element: .card__tags */
+    .card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 14px;
+    }
+
+    /* Element: .card__tag */
+    .card__tag {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      color: #6b7280;
+      cursor: default;
+      transition: transform 0.18s, background 0.18s, color 0.18s, border-color 0.18s;
+    }
+    .card__tag:hover            { transform: scale(1.08); background: #f3f4f6; color: #111827; }
+    body.is-dark .card__tag     { border-color: #334155; color: #64748b; }
+    body.is-dark .card__tag:hover { background: #273449; color: #e2e8f0; }
+
+    /* Modifier: .card__tag--featured (파란 카드용) */
+    .card__tag--featured {
+      background: #eff6ff;
+      color: #1e40af;
+      border-color: #bfdbfe;
+    }
+    .card__tag--featured:hover  { background: #dbeafe; }
+    body.is-dark .card__tag--featured {
+      background: rgba(30,58,138,0.4);
+      color: #93c5fd;
+      border-color: #1d4ed8;
+    }
+
+    /* Element: .card__divider */
+    .card__divider {
+      height: 1px;
+      background: #f0f0f0;
+      margin-bottom: 14px;
+      transition: background 0.3s;
+    }
+    body.is-dark .card__divider { background: #1e293b; }
+
+    /* Element: .card__buttons */
+    .card__buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    /* Element: .card__btn */
+    .card__btn {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 8px 0;
+      border-radius: 9px;
+      border: 1px solid #e5e7eb;
+      background: transparent;
+      color: #4b5563;
+      cursor: pointer;
+      font-family: inherit;
+      transition: transform 0.15s, background 0.18s, color 0.18s,
+                  border-color 0.18s, box-shadow 0.18s;
+    }
+    .card__btn:hover  {
+      background: #f5f5f5;
+      color: #111827;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    .card__btn:active { transform: scale(0.96); }
+
+    body.is-dark .card__btn       { border-color: #334155; color: #94a3b8; }
+    body.is-dark .card__btn:hover { background: #273449; color: #e2e8f0; }
+
+    /* Modifier: .card__btn--primary (파란 카드 GitHub) */
+    .card__btn--primary {
+      background: #1e3a8a;
+      color: #ffffff;
+      border-color: #1e3a8a;
+    }
+    .card__btn--primary:hover {
+      background: #2563eb;
+      border-color: #2563eb;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+    }
+    body.is-dark .card__btn--primary       { background: #1d4ed8; border-color: #1d4ed8; }
+    body.is-dark .card__btn--primary:hover { background: #2563eb; border-color: #2563eb; }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- 다크모드 토글 -->
+  <header class="page-header">
+    <button
+      class="toggle-btn"
+      onclick="document.body.classList.toggle('is-dark');
+               this.textContent = document.body.classList.contains('is-dark') ? '☀️ 라이트 모드' : '🌙 다크 모드'">
+      다크 모드
+    </button>
+  </header>
+
+  <main class="card-grid">
+
+    <!-- 카드 1 — 임수종 -->
+    <article class="card">
+
+      <div class="card__banner">
+        <span class="card__banner-status">
+          <span class="card__banner-dot card__banner-dot--pulse"></span>
+          Available
+        </span>
+        <div class="card__avatar-wrap">
+          <div class="card__avatar">임</div>
+        </div>
+      </div>
+
+      <div class="card__body">
+        <h2 class="card__name">임수종</h2>
+        <p class="card__role">프론트엔드 · 용인</p>
+        <p class="card__bio">프론트엔드 3주차 과제 제출용 프로필입니다!</p>
+
+        <div class="card__tags">
+          <span class="card__tag card__tag--featured">React</span>
+          <span class="card__tag">TypeScript</span>
+          <span class="card__tag">Tailwind</span>
+          <span class="card__tag">Java</span>
+          <span class="card__tag">Python</span>
+        </div>
+
+        <div class="card__divider"></div>
+
+        <div class="card__buttons">
+          <button class="card__btn card__btn--primary">GitHub</button>
+          <button class="card__btn">Blog</button>
+        </div>
+      </div>
+
+    </article>
+
+    <!-- 카드 2 — 쫑수 (빨간색) -->
+    <article class="card card--red">
+
+      <div class="card__banner">
+        <span class="card__banner-status">
+          <span class="card__banner-dot card__banner-dot--pulse"></span>
+          Available
+        </span>
+        <div class="card__avatar-wrap">
+          <div class="card__avatar">쫑</div>
+        </div>
+      </div>
+
+      <div class="card__body">
+        <h2 class="card__name">쫑수</h2>
+        <p class="card__role">백엔드 · 용인</p>
+        <p class="card__bio">백엔드 개발자를 꿈꾸는 임수종입니다!</p>
+
+        <div class="card__tags">
+          <span class="card__tag card__tag--featured">Java</span>
+          <span class="card__tag">Python</span>
+        </div>
+
+        <div class="card__divider"></div>
+
+        <div class="card__buttons">
+          <button class="card__btn card__btn--primary">GitHub</button>
+          <button class="card__btn">Blog</button>
+        </div>
+      </div>
+
+    </article>
+
+  </main>
+
+</body>
+</html>
