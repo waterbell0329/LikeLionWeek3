@@ -1,0 +1,188 @@
+/* 리셋 & 기본 설정 */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 60px 16px;
+}
+
+/* 카드 컨테이너 */
+/*카드 배경, 모서리, 카드 그림자 추가, 카드 내부 여백 패딩,
+카드 최대 크기 설정 */
+.container {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 480px;
+}
+
+/* 제목 */
+/* 텍스트를 가운데 정렬, 크게, 굵기, 글자 간격,
+제목 위 아래 선 추가, 선과 텍스트 사이에 간격 확보*/
+.title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  border-top: 2px solid #222;
+  border-bottom: 2px solid #222;
+  padding: 10px 0;
+  margin-bottom: 28px;
+}
+
+/* 입력 영역 */
+/* 
+- flexbox로 input과 button을 가로로 나란히 배치,
+- 요소들 사이사이 간격 10px로 설정.
+- 입력 영역과 목록영역 사이 간격 24px
+- 입력창 디자인 : 연한 회색 테두리, 모서리 둥글게, 입력 텍스트 크기 14px,
+  포커스시 브라우저 기본의 파란 아웃라인 제거함,
+  경계선 색깔 0.2초동안 부드럽게 transition */
+.input-area {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.todo-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.todo-input:focus {
+  border-color: #222;
+}
+/* 
+button에 적용시킬점
+- 버튼 색 검정색
+- 텍스트 흰색
+- 기본 테두리 제거, 모서리 둥글게, 크기 및 굵기 설정
+- 마우스 올리면 손가락 cursor로 변경됨.
+- 텍스트 줄바꿈 방지
+- 배경색, 크기 변화에 전환 효과 0.2, 0.1초씩 적용 */
+.add-btn {
+  padding: 12px 20px;
+  background-color: #222;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.add-btn:hover {
+  background-color: #444;
+}
+ /* 버튼을 클릭하고 있을떄 줄어들면서 눌러지는 느낌 표현.*/
+.add-btn:active {
+  transform: scale(0.97);
+}
+
+/* 할 일 목록 영역 */
+.todo-list {
+  list-style: none;
+  border: 1.5px dashed #bbb;
+  border-radius: 10px;
+  padding: 12px;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 빈 상태 안내 문구 */
+.empty-msg {
+  color: #bbb;
+  font-size: 13px;
+  text-align: center;
+  border: 1.5px dashed #ddd;
+  border-radius: 8px;
+  padding: 14px;
+  pointer-events: none;
+}
+
+/* 개별 할 일 항목 */
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  padding: 12px 14px;
+  transition: background-color 0.2s;
+  animation: slideIn 0.2s ease;
+}
+ /*
+ 애니메이션 
+ - 시작단계 : 완전 투명, 위쪽으로 6px 올라가있는 상태
+ - 종료단계 : 완전 불투명, 원래 위치로 복귀
+ -> 위에서 내려오면서 나타내는 효과 */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 체크박스 */
+.todo-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #222;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* 할 일 텍스트 */
+.todo-text {
+  flex: 1;
+  font-size: 15px;
+  color: #222;
+  transition: color 0.2s;
+}
+
+/* 완료 상태 */
+.todo-item.done {
+  background-color: #f0f0f0;
+}
+
+.todo-item.done .todo-text {
+  text-decoration: line-through;
+  color: #aaa;
+}
+
+/* 삭제 버튼 */
+.delete-btn {
+  padding: 6px 12px;
+  background: #fff;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #555;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+ /* 삭제 버튼에 마우스 올리면 테두리 빨간색으로 변경. */
+.delete-btn:hover {
+  border-color: #e00;
+  color: #e00;
+}

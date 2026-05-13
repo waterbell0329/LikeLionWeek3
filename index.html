@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TODO LIST</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">수종의 할 일</h1>
+
+    <!-- 입력창 + 추가 버튼 -->
+    <div class="input-area">
+      <input
+        type="text"
+        id="todoInput"
+        class="todo-input"
+        placeholder="오늘의 일정을 입력하세요!"
+      />
+      <button id="addBtn" class="add-btn">+ 추가</button>
+    </div>
+
+    <!-- 할 일 목록 영역 -->
+    <ul id="todoList" class="todo-list">
+      <!-- 빈 상태 안내 문구 -->
+      <li id="emptyMsg" class="empty-msg">새 항목이 여기에 추가됩니다...</li>
+    </ul>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
